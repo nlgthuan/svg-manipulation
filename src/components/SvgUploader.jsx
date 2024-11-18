@@ -3,7 +3,7 @@ import { useState } from 'preact/hooks';
 const MAX_SIZE = 2 * 1024 * 1024; // Max size in bytes (2 MB)
 
 function SvgUploader({ onUpload }) {
-  const [error, setError] = useState(null);
+  const [error, setError] = useState('');
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -29,21 +29,23 @@ function SvgUploader({ onUpload }) {
   };
 
   return (
-    <div className="p-6 max-w-md mx-auto bg-white rounded-lg shadow-md">
+    <div className="w-full">
       <label
-        className="block mb-2 text-sm font-medium text-gray-700"
         htmlFor="svgFileInput"
+        className="flex w-32 mx-auto justify-center rounded-md bg-black px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black cursor-pointer"
       >
-        Upload SVG File
+        Choose SVG
       </label>
       <input
         type="file"
         id="svgFileInput"
         accept=".svg"
         onChange={handleFileChange}
-        className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none focus:border-indigo-500"
+        className="hidden"
       />
-      {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
+      {error && (
+        <p className="mt-2 text-sm text-red-600 text-center">{error}</p>
+      )}
     </div>
   );
 }
