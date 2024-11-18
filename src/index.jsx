@@ -7,7 +7,7 @@ import SvgUploader from './components/SvgUploader';
 import './style.css';
 
 function App() {
-  const [svgContent, setSvgContent] = useState(null);
+  const [svgContent, setSvgContent] = useState('');
   const svgContainerRef = useRef();
 
   useEffect(() => {
@@ -17,14 +17,14 @@ function App() {
   }, [svgContent]);
 
   return (
-    <div className="app">
-      <h1 className="text-2xl mb-4">SVG Manipulation Tool</h1>
-      <SvgUploader onUpload={setSvgContent} />
+    <div className="min-h-svh flex flex-col">
+      <h1 className="text-2xl mb-4 text-center">SVG Manipulation Tool</h1>
       <div
         ref={svgContainerRef}
-        className="mt-4 border p-4"
-        style={{ height: '500px', width: '100%' }}
-      />
+        className="border p-4 m-4 mb-16 h-[calc(100svh-130px)] overflow-auto flex items-center justify-center"
+      >
+        {svgContent === '' && <SvgUploader onUpload={setSvgContent} />}
+      </div>
     </div>
   );
 }

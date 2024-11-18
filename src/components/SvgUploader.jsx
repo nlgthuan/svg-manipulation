@@ -29,9 +29,21 @@ function SvgUploader({ onUpload }) {
   };
 
   return (
-    <div className="p-4">
-      <input type="file" accept=".svg" onChange={handleFileChange} />
-      {error && <p className="text-red-500">{error}</p>}
+    <div className="p-6 max-w-md mx-auto bg-white rounded-lg shadow-md">
+      <label
+        className="block mb-2 text-sm font-medium text-gray-700"
+        htmlFor="svgFileInput"
+      >
+        Upload SVG File
+      </label>
+      <input
+        type="file"
+        id="svgFileInput"
+        accept=".svg"
+        onChange={handleFileChange}
+        className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none focus:border-indigo-500"
+      />
+      {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
     </div>
   );
 }
