@@ -29,12 +29,12 @@ function SvgUploader({ onUpload }) {
   };
 
   return (
-    <div className="w-full">
+    <div className="m-auto w-full">
       <label
         htmlFor="svgFileInput"
-        className="flex w-32 mx-auto justify-center rounded-md bg-black px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black cursor-pointer"
+        className="flex w-32 max-w-full mx-auto justify-center rounded-md bg-black px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black cursor-pointer"
       >
-        Choose SVG
+        Choose an SVG
       </label>
       <input
         type="file"

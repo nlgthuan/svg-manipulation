@@ -18,11 +18,10 @@ function App() {
 
   return (
     <div className="min-h-svh flex flex-col">
-      <h1 className="text-2xl mb-4 text-center">SVG Manipulation Tool</h1>
-      <div
-        ref={svgContainerRef}
-        className="border p-4 m-4 mb-16 h-[calc(100svh-130px)] overflow-auto flex items-center justify-center"
-      >
+      <h1 className="fixed text-lg text-center shadow-md rounded-md p-2 bg-white">
+        SVG Manipulation Tool
+      </h1>
+      <div className="m-auto" ref={svgContainerRef}>
         {svgContent === '' && <SvgUploader onUpload={setSvgContent} />}
       </div>
     </div>
