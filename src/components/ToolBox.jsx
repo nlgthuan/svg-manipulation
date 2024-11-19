@@ -1,17 +1,26 @@
 import { useEffect, useState } from 'preact/hooks';
 
+function normalizeColorValue(color) {
+  const ctx = document.createElement('canvas').getContext('2d');
+  ctx.fillStyle = color;
+  return String(ctx.fillStyle);
+}
+
 function ToolBox({ selectedElement }) {
   const [fillColor, setFillColor] = useState('#000000');
   const [strokeColor, setStrokeColor] = useState('#000000');
 
   useEffect(() => {
     if (selectedElement.value) {
-      const currentFill =
-        selectedElement.value.getAttribute('fill') || '#000000';
-      const currentStroke =
-        selectedElement.value.getAttribute('stroke') || '#000000';
-      setFillColor(currentFill);
-      setStrokeColor(currentStroke);
+      const currentFill = selectedElement.value.getAttribute('fill');
+      const currentStroke = selectedElement.value.getAttribute('stroke');
+
+      if (currentFill) {
+        setFillColor(normalizeColorValue(currentFill));
+      }
+      if (currentStroke) {
+        setStrokeColor(normalizeColorValue(currentStroke));
+      }
     }
   }, [selectedElement.value]);
 
