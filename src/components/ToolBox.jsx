@@ -1,8 +1,19 @@
-import { useState } from 'preact/hooks';
+import { useEffect, useState } from 'preact/hooks';
 
 function ToolBox({ selectedElement }) {
   const [fillColor, setFillColor] = useState('#000000');
   const [strokeColor, setStrokeColor] = useState('#000000');
+
+  useEffect(() => {
+    if (selectedElement.value) {
+      const currentFill =
+        selectedElement.value.getAttribute('fill') || '#000000';
+      const currentStroke =
+        selectedElement.value.getAttribute('stroke') || '#000000';
+      setFillColor(currentFill);
+      setStrokeColor(currentStroke);
+    }
+  }, [selectedElement.value]);
 
   const handleFillColorChange = (event) => {
     const color = event.target.value;
