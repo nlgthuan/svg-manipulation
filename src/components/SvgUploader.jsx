@@ -1,8 +1,11 @@
 import { useState } from 'preact/hooks';
 
+import { useAppContext } from '../context/AppContext';
+
 const MAX_SIZE = 2 * 1024 * 1024; // Max size in bytes (2 MB)
 
-function SvgUploader({ svgContent }) {
+function SvgUploader() {
+  const { svgContent } = useAppContext();
   const [error, setError] = useState('');
 
   const handleFileChange = (event) => {
@@ -14,7 +17,10 @@ function SvgUploader({ svgContent }) {
       }
       if (file.size > MAX_SIZE) {
         setError(
-          `File is too large. Maximum size is ${(MAX_SIZE / (1024 * 1024)).toFixed(1)} MB.`,
+          `File is too large. Maximum size is ${(
+            MAX_SIZE /
+            (1024 * 1024)
+          ).toFixed(1)} MB.`,
         );
         return;
       }

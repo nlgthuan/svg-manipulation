@@ -1,17 +1,15 @@
-import { signal } from '@preact/signals';
 import { SVG } from '@svgdotjs/svg.js';
 import { render } from 'preact';
 import { useRef } from 'preact/hooks';
 
 import SvgUploader from './components/SvgUploader';
 import ToolBox from './components/ToolBox';
+import { AppProvider, useAppContext } from './context/AppContext';
 
 import './style.css';
 
-const svgContent = signal('');
-const selectedElement = signal(null);
-
 function App() {
+  const { svgContent, selectedElement } = useAppContext();
   const svgContainerRef = useRef();
 
   if (svgContent.value && svgContainerRef.current) {
@@ -30,11 +28,16 @@ function App() {
         SVG Manipulation Tool
       </h1>
       <div className="m-auto" ref={svgContainerRef}>
-        {svgContent.value === '' && <SvgUploader svgContent={svgContent} />}
+        {svgContent.value === '' && <SvgUploader />}
       </div>
-      <ToolBox selectedElement={selectedElement} />
+      <ToolBox />
     </div>
   );
 }
 
-render(<App />, document.getElementById('app'));
+render(
+  <AppProvider>
+    <App />
+  </AppProvider>,
+  document.getElementById('app'),
+);

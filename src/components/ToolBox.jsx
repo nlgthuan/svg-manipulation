@@ -1,18 +1,20 @@
 import { SVG } from '@svgdotjs/svg.js';
 import { useEffect, useState } from 'preact/hooks';
 
+import { useAppContext } from '../context/AppContext';
 import { normalizeColorValue } from '../utils';
 
-function ToolBox({ selectedElement }) {
+function ToolBox() {
+  const { selectedElement } = useAppContext();
   const element = selectedElement.value ? SVG(selectedElement.value) : null;
 
   const [fillColor, setFillColor] = useState('#000000');
   const [strokeColor, setStrokeColor] = useState('#000000');
 
   useEffect(() => {
-    if (selectedElement.value) {
-      const currentFill = selectedElement.value.getAttribute('fill');
-      const currentStroke = selectedElement.value.getAttribute('stroke');
+    if (element) {
+      const currentFill = element.attr('fill');
+      const currentStroke = element.attr('stroke');
 
       if (currentFill) {
         setFillColor(normalizeColorValue(currentFill));
@@ -21,7 +23,7 @@ function ToolBox({ selectedElement }) {
         setStrokeColor(normalizeColorValue(currentStroke));
       }
     }
-  }, [selectedElement.value]);
+  }, [element]);
 
   const handleFillColorChange = (event) => {
     const color = event.target.value;
