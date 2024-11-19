@@ -1,6 +1,5 @@
 import { SVG } from '@svgdotjs/svg.js';
 import { useEffect, useState } from 'preact/hooks';
-
 import { useAppContext } from '../context/AppContext';
 import { normalizeColorValue } from '../utils';
 
@@ -16,6 +15,7 @@ function ToolBox() {
     if (element) {
       const currentFill = element.attr('fill');
       const currentStroke = element.attr('stroke');
+      const currentRotation = element.transform('rotate');
 
       if (currentFill) {
         setFillColor(normalizeColorValue(currentFill));
@@ -23,6 +23,7 @@ function ToolBox() {
       if (currentStroke) {
         setStrokeColor(normalizeColorValue(currentStroke));
       }
+      setRotationAngle(+currentRotation || 0);
     }
   }, [element]);
 
@@ -46,7 +47,7 @@ function ToolBox() {
     const angle = parseFloat(event.target.value) || 0;
     setRotationAngle(angle);
     if (element) {
-      element.rotate(angle);
+      element.rotate(-rotationAngle).rotate(angle);
     }
   };
 
@@ -72,13 +73,9 @@ function ToolBox() {
         />
       </div>
       <div>
-        <label className="block text-sm mb-1">
-          Rotation (degrees): {rotationAngle}°
-        </label>
+        <label className="block text-sm mb-1">Rotation (degrees):</label>
         <input
-          type="range"
-          min="0"
-          max="360"
+          type="number"
           value={rotationAngle}
           onChange={handleRotationChange}
           className="w-full"
