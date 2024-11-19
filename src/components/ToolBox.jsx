@@ -1,12 +1,11 @@
+import { SVG } from '@svgdotjs/svg.js';
 import { useEffect, useState } from 'preact/hooks';
 
-function normalizeColorValue(color) {
-  const ctx = document.createElement('canvas').getContext('2d');
-  ctx.fillStyle = color;
-  return String(ctx.fillStyle);
-}
+import { normalizeColorValue } from '../utils';
 
 function ToolBox({ selectedElement }) {
+  const element = selectedElement.value ? SVG(selectedElement.value) : null;
+
   const [fillColor, setFillColor] = useState('#000000');
   const [strokeColor, setStrokeColor] = useState('#000000');
 
@@ -27,16 +26,16 @@ function ToolBox({ selectedElement }) {
   const handleFillColorChange = (event) => {
     const color = event.target.value;
     setFillColor(color);
-    if (selectedElement.value) {
-      selectedElement.value.setAttribute('fill', color);
+    if (element) {
+      element.attr('fill', color);
     }
   };
 
   const handleStrokeColorChange = (event) => {
     const color = event.target.value;
     setStrokeColor(color);
-    if (selectedElement.value) {
-      selectedElement.value.setAttribute('stroke', color);
+    if (element) {
+      element.attr('stroke', color);
     }
   };
 
