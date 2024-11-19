@@ -10,6 +10,7 @@ function ToolBox() {
 
   const [fillColor, setFillColor] = useState('#000000');
   const [strokeColor, setStrokeColor] = useState('#000000');
+  const [rotationAngle, setRotationAngle] = useState(0);
 
   useEffect(() => {
     if (element) {
@@ -41,6 +42,14 @@ function ToolBox() {
     }
   };
 
+  const handleRotationChange = (event) => {
+    const angle = parseFloat(event.target.value) || 0;
+    setRotationAngle(angle);
+    if (element) {
+      element.rotate(angle);
+    }
+  };
+
   return (
     <div className="fixed bottom-0 right-0 px-2 py-1 shadow-lg rounded-t-md bg-white border w-64 max-w-full">
       <h2 className="text-lg mb-2">Toolbox</h2>
@@ -53,12 +62,25 @@ function ToolBox() {
           className="w-full"
         />
       </div>
-      <div>
+      <div className="mb-2">
         <label className="block text-sm mb-1">Stroke Color:</label>
         <input
           type="color"
           value={strokeColor}
           onChange={handleStrokeColorChange}
+          className="w-full"
+        />
+      </div>
+      <div>
+        <label className="block text-sm mb-1">
+          Rotation (degrees): {rotationAngle}°
+        </label>
+        <input
+          type="range"
+          min="0"
+          max="360"
+          value={rotationAngle}
+          onChange={handleRotationChange}
           className="w-full"
         />
       </div>
