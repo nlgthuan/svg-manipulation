@@ -1,20 +1,20 @@
+import { signal } from '@preact/signals';
 import { SVG } from '@svgdotjs/svg.js';
 import { render } from 'preact';
-import { useEffect, useRef, useState } from 'preact/hooks';
+import { useRef } from 'preact/hooks';
 
 import SvgUploader from './components/SvgUploader';
 
 import './style.css';
 
+const svgContent = signal('');
+
 function App() {
-  const [svgContent, setSvgContent] = useState('');
   const svgContainerRef = useRef();
 
-  useEffect(() => {
-    if (svgContent && svgContainerRef.current) {
-      SVG(svgContent).addTo(svgContainerRef.current);
-    }
-  }, [svgContent]);
+  if (svgContent.value && svgContainerRef.current) {
+    SVG(svgContent.value).addTo(svgContainerRef.current);
+  }
 
   return (
     <div className="min-h-svh flex flex-col">
@@ -22,7 +22,7 @@ function App() {
         SVG Manipulation Tool
       </h1>
       <div className="m-auto" ref={svgContainerRef}>
-        {svgContent === '' && <SvgUploader onUpload={setSvgContent} />}
+        {svgContent.value === '' && <SvgUploader svgContent={svgContent} />}
       </div>
     </div>
   );

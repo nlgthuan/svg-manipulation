@@ -2,7 +2,7 @@ import { useState } from 'preact/hooks';
 
 const MAX_SIZE = 2 * 1024 * 1024; // Max size in bytes (2 MB)
 
-function SvgUploader({ onUpload }) {
+function SvgUploader({ svgContent }) {
   const [error, setError] = useState('');
 
   const handleFileChange = (event) => {
@@ -22,7 +22,7 @@ function SvgUploader({ onUpload }) {
       setError(null);
       const reader = new FileReader();
       reader.onload = (e) => {
-        onUpload(e.target.result);
+        svgContent.value = e.target.result;
       };
       reader.readAsText(file);
     }
