@@ -49,12 +49,16 @@ function ToolBox() {
 
   const handleRotationChange = (event) => {
     const angle = parseFloat(event.target.value) || 0;
+
+    const oldAngle = rotationAngle;
     setRotationAngle(angle);
+
     if (svgDrawing) {
-      svgDrawing.rotate(-rotationAngle).rotate(angle);
+      svgDrawing.each(function () {
+        this.rotate(angle - oldAngle);
+      });
     }
   };
-
   return (
     <div className="fixed bottom-0 right-0 px-2 py-1 shadow-lg rounded-t-md bg-white border w-64 max-w-full">
       <h2 className="text-lg mb-2">Toolbox</h2>
