@@ -1,4 +1,3 @@
-import { SVG } from '@svgdotjs/svg.js';
 import { useEffect, useState } from 'preact/hooks';
 
 import { useAppContext } from '../context/AppContext';
@@ -6,22 +5,17 @@ import { normalizeColorValue } from '../utils';
 
 function ToolBox() {
   const { selectedElement } = useAppContext();
-  const element = selectedElement.value ? SVG(selectedElement.value) : null;
+  const svgDrawing = selectedElement.value;
 
   const [fillColor, setFillColor] = useState('#000000');
   const [strokeColor, setStrokeColor] = useState('#000000');
   const [rotationAngle, setRotationAngle] = useState(0);
-  const [scaleX, setScaleX] = useState(1);
-  const [scaleY, setScaleY] = useState(1);
-  const [keepAspectRatio, setKeepAspectRatio] = useState(true);
 
   useEffect(() => {
-    if (element) {
-      const currentFill = element.attr('fill');
-      const currentStroke = element.attr('stroke');
-      const currentRotation = element.transform('rotate');
-      const currentScaleX = element.transform('scaleX');
-      const currentScaleY = element.transform('scaleY');
+    if (svgDrawing) {
+      const currentFill = svgDrawing.attr('fill');
+      const currentStroke = svgDrawing.attr('stroke');
+      const currentRotation = svgDrawing.transform('rotate');
 
       if (currentFill) {
         setFillColor(normalizeColorValue(currentFill));
@@ -30,55 +24,34 @@ function ToolBox() {
         setStrokeColor(normalizeColorValue(currentStroke));
       }
       setRotationAngle(+currentRotation || 0);
-      setScaleX(currentScaleX || 1);
-      setScaleY(currentScaleY || 1);
     }
-  }, [element]);
+  }, [svgDrawing]);
 
   const handleFillColorChange = (event) => {
     const color = event.target.value;
     setFillColor(color);
-    if (element) {
-      element.attr('fill', color);
+    if (svgDrawing) {
+      svgDrawing.each(function () {
+        this.attr('fill', color);
+      });
     }
   };
 
   const handleStrokeColorChange = (event) => {
     const color = event.target.value;
     setStrokeColor(color);
-    if (element) {
-      element.attr('stroke', color);
+    if (svgDrawing) {
+      svgDrawing.each(function () {
+        this.attr('stroke', color);
+      });
     }
   };
 
   const handleRotationChange = (event) => {
     const angle = parseFloat(event.target.value) || 0;
     setRotationAngle(angle);
-    if (element) {
-      element.rotate(-rotationAngle).rotate(angle);
-    }
-  };
-
-  const handleScaleChange = (event, axis) => {
-    const value = parseFloat(event.target.value) || 1;
-    if (axis === 'x') {
-      if (keepAspectRatio) {
-        setScaleX(value);
-        setScaleY(value);
-        if (element) {
-          element.scale(value, value);
-        }
-      } else {
-        setScaleX(value);
-        if (element) {
-          element.scale(value, scaleY);
-        }
-      }
-    } else {
-      setScaleY(value);
-      if (element) {
-        element.scale(scaleX, value);
-      }
+    if (svgDrawing) {
+      svgDrawing.rotate(-rotationAngle).rotate(angle);
     }
   };
 
@@ -111,36 +84,6 @@ function ToolBox() {
           onChange={handleRotationChange}
           className="w-full"
         />
-      </div>
-      <div className="mb-2">
-        <label className="block text-sm mb-1">Scale X:</label>
-        <input
-          type="number"
-          value={scaleX}
-          step="0.1"
-          onChange={(e) => handleScaleChange(e, 'x')}
-          className="w-full"
-        />
-      </div>
-      <div className="mb-2">
-        <label className="block text-sm mb-1">Scale Y:</label>
-        <input
-          type="number"
-          value={scaleY}
-          step="0.1"
-          onChange={(e) => handleScaleChange(e, 'y')}
-          className="w-full"
-        />
-      </div>
-      <div>
-        <label className="block text-sm mb-1">
-          <input
-            type="checkbox"
-            checked={keepAspectRatio}
-            onChange={(e) => setKeepAspectRatio(e.target.checked)}
-          />{' '}
-          Keep Aspect Ratio
-        </label>
       </div>
     </div>
   );
