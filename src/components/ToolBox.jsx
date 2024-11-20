@@ -1,73 +1,19 @@
-import { useEffect, useState } from 'preact/hooks';
+import { batch } from '@preact/signals';
+import { useState } from 'preact/hooks';
 
 import { useAppContext } from '../context/AppContext';
-import { normalizeColorValue } from '../utils';
 
 function ToolBox() {
+  const { fillColor, strokeColor, rotationAngle, widthScale, heightScale } =
+    useAppContext();
+
   const [isOpen, setIsOpen] = useState(false);
-  const { selectedElement } = useAppContext();
-  const svgDrawing = selectedElement.value;
-
-  const [fillColor, setFillColor] = useState('#000000');
-  const [strokeColor, setStrokeColor] = useState('#000000');
-  const [rotationAngle, setRotationAngle] = useState(0);
-  const [widthScale, setWidthScale] = useState(1.0);
-  const [heightScale, setHeightScale] = useState(1.0);
   const [proportional, setProportional] = useState(true);
-
-  useEffect(() => {
-    if (svgDrawing) {
-      const currentFill = svgDrawing.attr('fill') || '#000000';
-      const currentStroke = svgDrawing.attr('stroke') || '#000000';
-      const currentRotation = svgDrawing.transform('rotate');
-
-      if (currentFill) {
-        setFillColor(normalizeColorValue(currentFill));
-      }
-      if (currentStroke) {
-        setStrokeColor(normalizeColorValue(currentStroke));
-      }
-      setRotationAngle(+currentRotation || 0);
-    }
-  }, [svgDrawing]);
-
-  const handleFillColorChange = (event) => {
-    const color = event.target.value;
-    setFillColor(color);
-    if (svgDrawing) {
-      svgDrawing.each(function () {
-        this.attr('fill', color);
-      });
-    }
-  };
-
-  const handleStrokeColorChange = (event) => {
-    const color = event.target.value;
-    setStrokeColor(color);
-    if (svgDrawing) {
-      svgDrawing.each(function () {
-        this.attr('stroke', color);
-      });
-    }
-  };
-
-  const handleRotationChange = (event) => {
-    const angle = parseFloat(event.target.value) || 0;
-
-    const oldAngle = rotationAngle;
-    setRotationAngle(angle);
-
-    if (svgDrawing) {
-      svgDrawing.each(function () {
-        this.rotate(angle - oldAngle);
-      });
-    }
-  };
 
   const handleScaleChange = (event, axis) => {
     const scale = parseFloat(event.target.value);
-    let newWidthScale = widthScale;
-    let newHeightScale = heightScale;
+    let newWidthScale = widthScale.value;
+    let newHeightScale = heightScale.value;
 
     if (proportional) {
       newWidthScale = scale;
@@ -78,14 +24,10 @@ function ToolBox() {
       newHeightScale = scale;
     }
 
-    setWidthScale(newWidthScale);
-    setHeightScale(newHeightScale);
-
-    if (svgDrawing) {
-      svgDrawing.each(function () {
-        this.scale(newWidthScale / widthScale, newHeightScale / heightScale);
-      });
-    }
+    batch(() => {
+      widthScale.value = newWidthScale;
+      heightScale.value = newHeightScale;
+    });
   };
 
   const handleProportionalToggle = () => {
@@ -108,8 +50,8 @@ function ToolBox() {
             </label>
             <input
               type="color"
-              value={fillColor}
-              onChange={handleFillColorChange}
+              value={fillColor.value || '#000000'}
+              onChange={(e) => (fillColor.value = e.target.value)}
               className="block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
@@ -119,8 +61,8 @@ function ToolBox() {
             </label>
             <input
               type="color"
-              value={strokeColor}
-              onChange={handleStrokeColorChange}
+              value={strokeColor.value || '#000000'}
+              onChange={(e) => (strokeColor.value = e.target.value)}
               className="block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
@@ -130,8 +72,10 @@ function ToolBox() {
             </label>
             <input
               type="number"
-              value={rotationAngle}
-              onChange={handleRotationChange}
+              value={rotationAngle.value}
+              onChange={(e) =>
+                (rotationAngle.value = parseInt(e.target.value) || 0)
+              }
               className="block w-full border border-gray-300 pl-2 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
@@ -154,7 +98,7 @@ function ToolBox() {
               type="number"
               step="0.1"
               min="0"
-              value={widthScale}
+              value={widthScale.value}
               onChange={(e) => handleScaleChange(e, 'width')}
               className="block w-full border border-gray-300 pl-2 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
             />
@@ -167,7 +111,7 @@ function ToolBox() {
               type="number"
               step="0.1"
               min="0"
-              value={heightScale}
+              value={heightScale.value}
               onChange={(e) => handleScaleChange(e, 'height')}
               className="block w-full border border-gray-300 pl-2 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
               disabled={proportional}
