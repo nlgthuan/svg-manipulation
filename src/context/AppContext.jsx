@@ -3,8 +3,8 @@ import { createContext } from 'preact';
 import { useContext } from 'preact/hooks';
 
 function createAppState() {
-  const svgContent = signal('');
-  const selectedElement = signal(null);
+  const svgContents = signal([]);
+  const selectedElements = signal([]);
 
   const fillColor = signal('');
   const strokeColor = signal('');
@@ -13,8 +13,7 @@ function createAppState() {
   const heightScale = signal(1.0);
 
   const updateSvgDrawing = () => {
-    const svgDrawing = selectedElement.value;
-    if (svgDrawing) {
+    for (const svgDrawing of selectedElements.value) {
       svgDrawing.each(function () {
         if (fillColor.value !== '') {
           this.attr('fill', fillColor.value);
@@ -39,8 +38,8 @@ function createAppState() {
   effect(updateSvgDrawing);
 
   return {
-    svgContent,
-    selectedElement,
+    svgContents,
+    selectedElements,
     fillColor,
     strokeColor,
     rotationAngle,

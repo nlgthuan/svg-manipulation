@@ -9,13 +9,17 @@ import { AppProvider, useAppContext } from './context/AppContext';
 import './style.css';
 
 function App() {
-  const { svgContent, selectedElement } = useAppContext();
+  const { svgContents, selectedElements } = useAppContext();
   const svgContainerRef = useRef();
 
-  if (svgContent.value && svgContainerRef.current) {
-    const draw = SVG(svgContent.value).addTo(svgContainerRef.current);
+  if (svgContainerRef.current) {
+    const elements = [];
+    for (const svgContent of svgContents.value) {
+      const draw = SVG(svgContent).addTo(svgContainerRef.current);
+      elements.push(draw);
+    }
 
-    selectedElement.value = draw;
+    selectedElements.value = elements;
   }
 
   return (
@@ -24,7 +28,7 @@ function App() {
         SVG Manipulation Tool
       </h1>
       <div className="m-auto" ref={svgContainerRef}>
-        {svgContent.value === '' && <SvgUploader />}
+        {svgContents.value.length === 0 && <SvgUploader />}
       </div>
       <ToolBox />
     </div>
