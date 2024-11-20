@@ -1,6 +1,6 @@
 import { SVG } from '@svgdotjs/svg.js';
 import { render } from 'preact';
-import { useRef } from 'preact/hooks';
+import { useRef, useEffect } from 'preact/hooks';
 
 import SvgUploader from './components/SvgUploader';
 import ToolBox from './components/ToolBox';
@@ -13,13 +13,24 @@ function App() {
   const svgContainerRef = useRef();
 
   if (svgContainerRef.current) {
-    const elements = [];
     for (const svgContent of svgContents.value) {
       const draw = SVG(svgContent).addTo(svgContainerRef.current);
-      elements.push(draw);
-    }
 
-    selectedElements.value = elements;
+      draw.css('cursor', 'pointer');
+
+      draw.click(() => {
+        // Toggle SVG selection
+        if (selectedElements.value.includes(draw)) {
+          selectedElements.value = selectedElements.value.filter(
+            (svg) => svg !== draw,
+          );
+          draw.removeClass('selected');
+        } else {
+          selectedElements.value = [...selectedElements.value, draw];
+          draw.addClass('selected');
+        }
+      });
+    }
   }
 
   return (

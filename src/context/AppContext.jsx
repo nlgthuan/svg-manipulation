@@ -23,7 +23,7 @@ function createAppState() {
         }
 
         const currentRotation = this.transform('rotate') || 0;
-        this.transform({ rotate: currentRotation + rotationAngle.value });
+        this.rotate(-currentRotation).rotate(rotationAngle.value);
 
         const currentScaleX = this.transform('scaleX') || 1.0;
         const currentScaleY = this.transform('scaleY') || 1.0;
