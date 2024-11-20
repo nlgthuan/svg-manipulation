@@ -10,6 +10,9 @@ function ToolBox() {
   const [fillColor, setFillColor] = useState('#000000');
   const [strokeColor, setStrokeColor] = useState('#000000');
   const [rotationAngle, setRotationAngle] = useState(0);
+  const [widthScale, setWidthScale] = useState(1.0);
+  const [heightScale, setHeightScale] = useState(1.0);
+  const [proportional, setProportional] = useState(true);
 
   useEffect(() => {
     if (svgDrawing) {
@@ -59,6 +62,35 @@ function ToolBox() {
       });
     }
   };
+
+  const handleScaleChange = (event, axis) => {
+    const scale = parseFloat(event.target.value);
+    let newWidthScale = widthScale;
+    let newHeightScale = heightScale;
+
+    if (proportional) {
+      newWidthScale = scale;
+      newHeightScale = scale;
+    } else if (axis === 'width') {
+      newWidthScale = scale;
+    } else if (axis === 'height') {
+      newHeightScale = scale;
+    }
+
+    setWidthScale(newWidthScale);
+    setHeightScale(newHeightScale);
+
+    if (svgDrawing) {
+      svgDrawing.each(function () {
+        this.scale(newWidthScale / widthScale, newHeightScale / heightScale);
+      });
+    }
+  };
+
+  const handleProportionalToggle = () => {
+    setProportional(!proportional);
+  };
+
   return (
     <div className="fixed bottom-0 right-0 px-2 py-1 shadow-lg rounded-t-md bg-white border w-64 max-w-full">
       <h2 className="text-lg mb-2">Toolbox</h2>
@@ -87,6 +119,40 @@ function ToolBox() {
           value={rotationAngle}
           onChange={handleRotationChange}
           className="w-full"
+        />
+      </div>
+      <div className="mb-2">
+        <label className="block text-sm mb-1">
+          Proportional Scaling:
+          <input
+            type="checkbox"
+            checked={proportional}
+            onChange={handleProportionalToggle}
+            className="ml-2"
+          />
+        </label>
+      </div>
+      <div className="mb-2">
+        <label className="block text-sm mb-1">Width Scale:</label>
+        <input
+          type="number"
+          step="0.1"
+          min="0"
+          value={widthScale}
+          onChange={(e) => handleScaleChange(e, 'width')}
+          className="w-full"
+        />
+      </div>
+      <div className="mb-2">
+        <label className="block text-sm mb-1">Height Scale:</label>
+        <input
+          type="number"
+          step="0.1"
+          min="0"
+          value={heightScale}
+          onChange={(e) => handleScaleChange(e, 'height')}
+          className="w-full"
+          disabled={proportional}
         />
       </div>
     </div>

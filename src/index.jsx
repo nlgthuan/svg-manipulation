@@ -1,6 +1,6 @@
 import { SVG } from '@svgdotjs/svg.js';
 import { render } from 'preact';
-import { useRef, useEffect } from 'preact/hooks';
+import { useRef } from 'preact/hooks';
 
 import SvgUploader from './components/SvgUploader';
 import ToolBox from './components/ToolBox';
@@ -14,7 +14,7 @@ function App() {
 
   if (svgContent.value && svgContainerRef.current) {
     const draw = SVG(svgContent.value).addTo(svgContainerRef.current);
-    // Select the whole SVG root
+
     selectedElement.value = draw;
   }
 
