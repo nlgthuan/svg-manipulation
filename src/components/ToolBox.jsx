@@ -16,8 +16,8 @@ function ToolBox() {
 
   useEffect(() => {
     if (svgDrawing) {
-      const currentFill = svgDrawing.attr('fill');
-      const currentStroke = svgDrawing.attr('stroke');
+      const currentFill = svgDrawing.attr('fill') || '#000000';
+      const currentStroke = svgDrawing.attr('stroke') || '#000000';
       const currentRotation = svgDrawing.transform('rotate');
 
       if (currentFill) {
