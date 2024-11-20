@@ -92,66 +92,76 @@ function ToolBox() {
   };
 
   return (
-    <div className="fixed bottom-0 right-0 px-2 py-1 shadow-lg rounded-t-md bg-white border w-64 max-w-full">
-      <h2 className="text-lg mb-2">Toolbox</h2>
-      <div className="mb-2">
-        <label className="block text-sm mb-1">Fill Color:</label>
+    <div className="fixed bottom-0 right-0 px-4 py-3 shadow-lg rounded-t-lg bg-white border w-64 max-w-full">
+      <h2 className="text-lg mb-3 font-medium">Toolbox</h2>
+      <div className="mb-3">
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Fill Color:
+        </label>
         <input
           type="color"
           value={fillColor}
           onChange={handleFillColorChange}
-          className="w-full"
+          className="block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
         />
       </div>
-      <div className="mb-2">
-        <label className="block text-sm mb-1">Stroke Color:</label>
+      <div className="mb-3">
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Stroke Color:
+        </label>
         <input
           type="color"
           value={strokeColor}
           onChange={handleStrokeColorChange}
-          className="w-full"
+          className="block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
         />
       </div>
-      <div className="mb-2">
-        <label className="block text-sm mb-1">Rotation (degrees):</label>
+      <div className="mb-3">
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Rotation (degrees):
+        </label>
         <input
           type="number"
           value={rotationAngle}
           onChange={handleRotationChange}
-          className="w-full"
+          className="block w-full border border-gray-300 pl-2 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
         />
       </div>
-      <div className="mb-2">
-        <label className="block text-sm mb-1">
+      <div className="mb-3">
+        <label className="block text-sm font-medium text-gray-700 mb-1">
           Proportional Scaling:
           <input
             type="checkbox"
             checked={proportional}
             onChange={handleProportionalToggle}
-            className="ml-2"
+            className="ml-2 focus:ring-indigo-500 border-gray-300 rounded"
           />
         </label>
       </div>
-      <div className="mb-2">
-        <label className="block text-sm mb-1">Width Scale:</label>
+      <div className="mb-3">
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Width Scale:
+        </label>
         <input
           type="number"
           step="0.1"
           min="0"
           value={widthScale}
           onChange={(e) => handleScaleChange(e, 'width')}
-          className="w-full"
+          className="block w-full border border-gray-300 pl-2 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
         />
       </div>
-      <div className="mb-2">
-        <label className="block text-sm mb-1">Height Scale:</label>
+      <div className="mb-3">
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Height Scale:
+        </label>
         <input
           type="number"
           step="0.1"
           min="0"
           value={heightScale}
           onChange={(e) => handleScaleChange(e, 'height')}
-          className="w-full"
+          className="block w-full border border-gray-300 pl-2 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
           disabled={proportional}
         />
       </div>
